@@ -1,13 +1,9 @@
-package com.staxrt.tutorial;
+package com.payroll.springboot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * The type Application.
- *
- * @author Givantha Kalansuriya
- */
+
 @SpringBootApplication
 public class Application {
 

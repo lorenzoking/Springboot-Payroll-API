@@ -18,7 +18,7 @@
  *
  */
 
-package com.staxrt.tutorial.exception;
+package com.payroll.springboot.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
