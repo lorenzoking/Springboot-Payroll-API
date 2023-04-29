@@ -94,7 +94,7 @@ public class EmployeeController {
                     .findById(employeeId)
                     .orElseThrow(() -> new ResourceNotFoundException("Employee not found on :: " + employeeId));
 
-    // Checks if salary was set, if it was then verify validity, if not then do nothing
+    // Checks if salary was set, if it was then verify input validity and set salary; if not then do nothing
     double salary = employeeDetails.getSalary();
     boolean isSalarySet = (salary != 0);
     if (isSalarySet && (employeeDetails.getSalary() < 80000 || employeeDetails.getSalary() > 200000)) {
