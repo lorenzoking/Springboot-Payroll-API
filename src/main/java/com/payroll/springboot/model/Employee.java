@@ -5,6 +5,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import java.util.Date;
 import java.util.Random;
@@ -18,16 +22,24 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @NotNull
+    @Size(min = 2, max = 50)
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
+    @NotNull
+    @Size(min = 2, max = 50)
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @NotNull
+    @Size(min = 2, max = 50)
     @Column(name = "job_role", nullable = false)
     private String jobRole;
 
-    @Column(name = "salary", nullable = false)
+    @Min(80000)
+    @Max(200000)
+    @Column(name = "salary")
     private int salary;
 
     @CreationTimestamp
@@ -40,7 +52,8 @@ public class Employee {
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
 
-  /**
+
+    /**
    * Gets id.
    *
    * @return the id
@@ -117,7 +130,7 @@ public class Employee {
      *
      * @return the salary
      */
-  public double getSalary() {
+  public int getSalary() {
         return salary;
   }
 
@@ -166,13 +179,6 @@ public class Employee {
         this.updatedAt = updatedAt;
     }
 
-
-    public Employee() {
-        Random rand = new Random();
-        int upperbound = 200000;
-        int lowerbound = 80000;
-        this.salary = rand.nextInt(upperbound - lowerbound) + lowerbound;
-    }
 
     @Override
     public String toString() {
