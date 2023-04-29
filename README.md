@@ -1,6 +1,4 @@
-
-
-# REST API using Spring Boot, H2, and JPA
+# Employee Payroll REST API using Spring Boot, JPA, H2, and Docker
 
 ## Steps to Setup
 
@@ -11,15 +9,14 @@ https://github.com/lorenzoking/spring-boot-payroll-api.git
 ```
 
 
-**2. Build and run the app using maven**
+**2. Run the following commands to build then start a docker container that houses the API**
 
 ```bash
-mvn package
-java -jar target/spring-boot-payroll-api-0.0.1-SNAPSHOT.jar
-
+make payroll-api
+./run-api.sh 1.0.0
 ```
 
-You can also run the app without packaging it by using -
+You can also run the app outside of the docker container by using -
 
 ```bash
 mvn spring-boot:run

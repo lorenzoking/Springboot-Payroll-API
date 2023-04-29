@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 
 import java.util.Date;
+import java.util.Random;
 
 @Entity
 @Table(name = "employees")
@@ -25,6 +26,9 @@ public class Employee {
 
     @Column(name = "job_role", nullable = false)
     private String jobRole;
+
+    @Column(name = "salary", nullable = false)
+    private int salary;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -108,11 +112,28 @@ public class Employee {
         this.jobRole = jobRole;
     }
 
-  /**
-   * Gets created at.
-   *
-   * @return the created at
-   */
+    /**
+     * Gets salary.
+     *
+     * @return the salary
+     */
+  public double getSalary() {
+        return salary;
+  }
+
+    /**
+     * Sets salary.
+     *
+     * @param salary the salary
+     */
+  public void setSalary(Integer salary) {this.salary = salary;}
+
+    /**
+     * Gets created at.
+     *
+     * @return the created at
+     */
+
   public Date getCreatedAt() {
         return createdAt;
     }
@@ -146,6 +167,13 @@ public class Employee {
     }
 
 
+    public Employee() {
+        Random rand = new Random();
+        int upperbound = 200000;
+        int lowerbound = 80000;
+        this.salary = rand.nextInt(upperbound - lowerbound) + lowerbound;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -153,6 +181,7 @@ public class Employee {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", jobRole='" + jobRole + '\'' +
+                ", salary=" + salary + '\'' +
                 ", createdAt=" + createdAt + '\'' +
                 ", updatedAt=" + updatedAt + '\'' +
                 '}';
