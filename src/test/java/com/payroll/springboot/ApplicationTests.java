@@ -10,9 +10,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -32,6 +35,7 @@ public class ApplicationTests {
 
 	private long savedEmployeeId;
 	private long savedEmployeeId2;
+	private long savedEmployeeId3;
 
 	private String getRootUrl() {
 		return "http://localhost:" + port;
@@ -59,6 +63,14 @@ public class ApplicationTests {
 		employeeRepository.save(employee2);
 		this.savedEmployeeId2 = employee2.getId();
 
+		Employee employee3 = new Employee();
+		employee3.setFirstName("Jessie");
+		employee3.setLastName("Bates");
+		employee3.setJobRole("Backend Developer");
+		employee3.setSalary(130000);
+		employeeRepository.save(employee3);
+		this.savedEmployeeId3 = employee3.getId();
+
 	}
 
 	@After
@@ -81,6 +93,41 @@ public class ApplicationTests {
 		System.out.println(employee.getFirstName());
 		assertEquals("John", employee.getFirstName());
 
+	}
+
+	@Test
+	public void testGetEmployeesByLastName() {
+		// Get employees by last name
+		ResponseEntity<List<Employee>> response = restTemplate.exchange(
+				getRootUrl() + "/api/employees/lastName/Doe",
+				HttpMethod.GET, null, new ParameterizedTypeReference<List<Employee>>(){});
+
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertNotNull(response.getBody());
+
+		List<Employee> employees = response.getBody();
+		for (Employee employee : employees) {
+			assertEquals("Doe", employee.getLastName());
+		}
+		System.out.println(response.getBody());
+	}
+
+	@Test
+	public void testGetEmployeesByJobRole() {
+		// Get employees by job role
+		ResponseEntity<List<Employee>> response = restTemplate.exchange(
+				getRootUrl() + "/api/employees/jobRole/Manager",
+				HttpMethod.GET, null, new ParameterizedTypeReference<List<Employee>>() {
+				});
+
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertNotNull(response.getBody());
+
+		List<Employee> employees = response.getBody();
+		for (Employee employee : response.getBody()) {
+			assertEquals("Manager", employee.getJobRole());
+		}
+		System.out.println(response.getBody());
 	}
 
 	@Test

@@ -48,6 +48,29 @@ public class EmployeeController {
     return ResponseEntity.status(HttpStatus.OK).body(employee);
   }
 
+  @GetMapping("/employees/jobRole/{jobRole}")
+  public ResponseEntity<List<Employee>> getEmployeesByJobRole(@PathVariable(value = "jobRole") String jobRole) {
+    List<Employee> employees = employeeRepository.findByJobRole(jobRole);
+    if (employees.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok().body(employees);
+  }
+
+  @GetMapping("/employees/lastName/{lastName}")
+  public ResponseEntity<List<Employee>> getEmployeesByLastName(@PathVariable(value = "lastName") String lastName)
+          throws ResourceNotFoundException {
+    if (lastName == null || lastName.isEmpty()) {
+      throw new IllegalArgumentException("Last name cannot be empty");
+    }
+    List<Employee> employees = employeeRepository.findByLastName(lastName);
+    if (employees.isEmpty()) {
+      throw new ResourceNotFoundException("Employees not found with last name: " + lastName);
+    }
+    return ResponseEntity.ok(employees);
+  }
+
+
   /**
    * Create employee.
    *
@@ -56,6 +79,14 @@ public class EmployeeController {
    */
   @PostMapping("/employees")
   public ResponseEntity<Object> createEmployee(@Valid @RequestBody Employee employee) {
+    // Check if employee with same name already exists
+    List<Employee> existingEmployee = employeeRepository.findByFirstNameAndLastName(
+            employee.getFirstName(), employee.getLastName());
+    if (!existingEmployee.isEmpty()) {
+      Map<String, Object> errorResponse = new HashMap<>();
+      errorResponse.put("message", "Employee with same name already exists");
+      return ResponseEntity.badRequest().body(errorResponse);
+    }
     //If salary is set, check if its in range. If salary is not set then we will randomize the salary
     double salary = employee.getSalary();
     boolean isSalarySet = (salary != 0);
