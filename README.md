@@ -32,6 +32,10 @@ The app will start running at <http://localhost:8080>.
     
     GET /api/employees/{employeeId}
     
+    GET /api/employees/jobRole/{jobRole}
+
+    GET /api/employees/lastName/{lastName}
+    
     PUT /api/employees/{employeeId}
     
     DELETE /api/employees/{employeeId}
