@@ -81,8 +81,8 @@ public class ApplicationTests {
 	@Test
 	public void testGetAllEmployees() {
 		ResponseEntity<String> response = restTemplate.getForEntity(getRootUrl() + "/api/employees", String.class);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		System.out.println(response.getBody());
 	}
 
@@ -189,6 +189,21 @@ public class ApplicationTests {
 		assertNotNull(updatedEmployee);
 		assertEquals("Khariim", updatedEmployee.getFirstName());
 		assertEquals("Visionary", updatedEmployee.getJobRole());
+	}
+
+	//Test UpdateEmployeeWithInvalidSalary
+	@Test
+	public void testUpdateEmployeeWithInvalidSalary() {
+		Employee employee = restTemplate.getForObject(getRootUrl() + "/api/employees/" + this.savedEmployeeId2, Employee.class);
+		assertNotNull(employee);
+		employee.setSalary(250000);
+
+		restTemplate.put(getRootUrl() + "/api/employees/" + this.savedEmployeeId2, employee);
+
+		HttpEntity<Employee> updatedEmployee = new HttpEntity<>(employee);
+		ResponseEntity<String> putResponse = restTemplate.exchange(getRootUrl() + "/api/employees/" + this.savedEmployeeId2, HttpMethod.PUT, updatedEmployee, String.class);
+		assertEquals(HttpStatus.BAD_REQUEST, putResponse.getStatusCode());
+		System.out.println(putResponse.getBody());
 	}
 
 

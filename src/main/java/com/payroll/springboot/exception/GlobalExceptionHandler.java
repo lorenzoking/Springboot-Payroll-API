@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
   }
 
   /**
-   * Globle excpetion handler response entity.
+   * Global excpetion handler response entity.
    *
    * @param ex the ex
    * @param request the request

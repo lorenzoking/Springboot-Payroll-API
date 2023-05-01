@@ -48,15 +48,30 @@ public class EmployeeController {
     return ResponseEntity.status(HttpStatus.OK).body(employee);
   }
 
+  /**
+   * Gets employees by jobRole.
+   *
+   * @param jobRole the employee jobRole
+   * @return the employees by jobRole
+   * @throws ResourceNotFoundException the resource not found exception
+   */
   @GetMapping("/employees/jobRole/{jobRole}")
-  public ResponseEntity<List<Employee>> getEmployeesByJobRole(@PathVariable(value = "jobRole") String jobRole) {
+  public ResponseEntity<List<Employee>> getEmployeesByJobRole(@PathVariable(value = "jobRole") String jobRole) throws ResourceNotFoundException {
     List<Employee> employees = employeeRepository.findByJobRole(jobRole);
     if (employees.isEmpty()) {
-      return ResponseEntity.notFound().build();
+      throw new ResourceNotFoundException("Employees not found with the Job Role: " + jobRole);
     }
     return ResponseEntity.ok().body(employees);
   }
 
+
+  /**
+   * Gets employees by lastName.
+   *
+   * @param lastName the employee lastName
+   * @return the employees by lastName
+   * @throws ResourceNotFoundException the resource not found exception
+   */
   @GetMapping("/employees/lastName/{lastName}")
   public ResponseEntity<List<Employee>> getEmployeesByLastName(@PathVariable(value = "lastName") String lastName)
           throws ResourceNotFoundException {
@@ -120,6 +135,7 @@ public class EmployeeController {
   public ResponseEntity<Object> updateEmployee(
           @PathVariable(value = "id") Long employeeId, @Valid @RequestBody Employee employeeDetails)
           throws ResourceNotFoundException {
+    // Check if employee is in the system
     Employee employee =
             employeeRepository
                     .findById(employeeId)
